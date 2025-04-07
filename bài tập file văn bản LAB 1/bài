@@ -1,0 +1,36 @@
+#include <iostream>
+#include <fstream>
+#include <vector>
+
+void readFileAndPrint(const std::string &filename) {
+    std::ifstream infile(filename);
+    if (!infile) {
+        std::cerr << "Khong the mo file!" << std::endl;
+        return;
+    }
+
+    int n, m;
+    infile >> n >> m;
+    std::vector<std::vector<int>> matrix(n, std::vector<int>(m));
+
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j < m; ++j) {
+            infile >> matrix[i][j];
+        }
+    }
+
+    infile.close();
+
+    std::cout << "Mang 2 chieu:" << std::endl;
+    for (const auto &row : matrix) {
+        for (int num : row) {
+            std::cout << num << " ";
+        }
+        std::cout << std::endl;
+    }
+}
+
+int main() {
+    readFileAndPrint("MangSo.inp");
+    return 0;
+}
