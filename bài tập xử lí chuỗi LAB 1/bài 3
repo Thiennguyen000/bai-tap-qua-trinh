@@ -1,0 +1,23 @@
+#include <iostream>
+#include <string>
+
+void insertCharacter(std::string &s, int k, char c) {
+    s.insert(k, 1, c);
+}
+
+int main() {
+    std::string s;
+    int k;
+    char c;
+    std::cout << "Moi ban nhap chuoi s: ";
+    std::cin >> s;
+    std::cout << "Moi ban nhap vi tri k: ";
+    std::cin >> k;
+    std::cout << "Moi ban nhap ky tu c: ";
+    std::cin >> c;
+    if (k >= 0 && k <= s.length()) {
+        insertCharacter(s, k, c);
+    }
+    std::cout << "Chuoi sau khi chen ky tu '" << c << "' tai vi tri " << k << ": " << s << std::endl;
+    return 0;
+}
