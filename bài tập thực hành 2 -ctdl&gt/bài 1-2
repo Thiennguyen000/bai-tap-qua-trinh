@@ -1,0 +1,43 @@
+#include <iostream>
+using namespace std;
+
+void rotateArray(int a[], int n, int k) {
+    int* temp = new int[k];
+    for (int i = 0; i < k; ++i) {
+        temp[i] = a[i];
+    }
+    for (int i = k; i < n; ++i) {
+        a[i - k] = a[i];
+    }
+    for (int i = 0; i < k; ++i) {
+        a[n - k + i] = temp[i];
+    }
+    delete[] temp;
+}
+
+int main() {
+    int n, k;
+    cout << "Nhap so phan tu n: ";
+    cin >> n;
+    int* a = new int[n];
+    cout << "Nhap cac phan tu cua day:\n";
+    for (int i = 0; i < n; ++i) {
+        cin >> a[i];
+    }
+    cout << "Nhap so k: ";
+    cin >> k;
+
+    if (k > 0 && k < n) {
+        rotateArray(a, n, k);
+        cout << "Day sau khi chuyen " << k << " phan tu dau tien ve cuoi la:\n";
+        for (int i = 0; i < n; ++i) {
+            cout << a[i] << " ";
+        }
+        cout << endl;
+    } else {
+        cout << "Gia tri k khong hop le.\n";
+    }
+
+    delete[] a;
+    return 0;
+}
