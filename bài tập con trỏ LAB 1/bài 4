@@ -1,0 +1,76 @@
+#include <iostream>
+using namespace std;
+
+void mergeArrays(double* a, int n, double* b, int m, double* c, int* cSize) {
+    int i = 0, j = 0, k = 0;
+    while (i < n && j < m) {
+        if (a[i] <= b[j]) {
+            c[k] = a[i];
+            i++;
+        } else {
+            c[k] = b[j];
+            j++;
+        }
+        k++;
+    }
+    
+    while (i < n) {
+        c[k] = a[i];
+        i++;
+        k++;
+    }
+    
+    while (j < m) {
+        c[k] = b[j];
+        j++;
+        k++;
+    }
+    
+    *cSize = k;
+}
+
+int main() {
+    int n, m;
+    cout << "+ Day so a" << endl;
+    cout << "Moi ban nhap so luong phan tu: ";
+    cin >> n;
+    if (n <= 0 || n > 100) {
+        cout << "n khong hop le!" << endl;
+        return 1;
+    }
+    
+    double a[100];
+    for (int i = 0; i < n; i++) {
+        cout << "Phan tu " << i << ": ";
+        cin >> a[i];
+    }
+    
+    cout << "+ Day so b" << endl;
+    cout << "Moi ban nhap so luong phan tu: ";
+    cin >> m;
+    if (m <= 0 || m > 100) {
+        cout << "m khong hop le!" << endl;
+        return 1;
+    }
+    
+    double b[100], c[200];
+    for (int i = 0; i < m; i++) {
+        cout << "Phan tu " << i << ": ";
+        cin >> b[i];
+    }
+    
+    int cSize;
+    mergeArrays(a, n, b, m, c, &cSize);
+    
+    cout << "+ Day so c" << endl;
+    cout << "Day so co " << cSize << " phan tu: ";
+    for (int i = 0; i < cSize; i++) {
+        cout << c[i];
+        if (i < cSize - 1) {
+            cout << " ";
+        }
+    }
+    cout << endl;
+    
+    return 0;
+}
