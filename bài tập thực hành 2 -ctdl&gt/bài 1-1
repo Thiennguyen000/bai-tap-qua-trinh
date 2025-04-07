@@ -1,0 +1,123 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+bool isEven(int x) {
+    return x % 2 == 0;
+}
+
+bool isPrime(int x) {
+    if (x < 2) return false;
+    for (int i = 2; i * i <= x; i++) {
+        if (x % i == 0) return false;
+    }
+    return true;
+}
+
+int longestEvenSubarray(vector<int>& a) {
+    int maxLen = 0;
+    int currLen = 0;
+    for (int i = 0; i < a.size(); i++) {
+        if (isEven(a[i])) {
+            currLen++;
+            maxLen = max(maxLen, currLen);
+        } else {
+            currLen = 0;
+        }
+    }
+    return maxLen;
+}
+
+vector<int> longestIncreasingSubarray(vector<int>& a) {
+    vector<int> curr, result;
+    curr.push_back(a[0]);
+    result = curr;
+    for (int i = 1; i < a.size(); i++) {
+        if (a[i] > curr.back()) {
+            curr.push_back(a[i]);
+        } else {
+            curr.clear();
+            curr.push_back(a[i]);
+        }
+        if (curr.size() > result.size()) {
+            result = curr;
+        }
+    }
+    return result;
+}
+
+int kthLargest(vector<int>& a, int k) {
+    vector<int> temp = a;
+    sort(temp.begin(), temp.end(), greater<int>());
+    return temp[k - 1];
+}
+
+vector<int> longestPrimeIncreasingSubarray(vector<int>& a) {
+    vector<vector<int>> dp(a.size(), vector<int>());
+    dp[0].push_back(a[0]);
+    int maxPrimeCount = isPrime(a[0]) ? 1 : 0;
+    int maxIdx = 0;
+    for (int i = 1; i < a.size(); i++) {
+        dp[i].push_back(a[i]);
+        for (int j = 0; j < i; j++) {
+            if (a[i] > a[j] && dp[j].size() + 1 > dp[i].size()) {
+                dp[i] = dp[j];
+                dp[i].push_back(a[i]);
+            }
+        }
+        int primeCount = 0;
+        for (int x : dp[i]) {
+            if (isPrime(x)) primeCount++;
+        }
+        if (primeCount > maxPrimeCount) {
+            maxPrimeCount = primeCount;
+            maxIdx = i;
+        }
+    }
+    return dp[maxIdx];
+}
+
+void frequencyCount(vector<int>& a) {
+    vector<int> temp = a;
+    sort(temp.begin(), temp.end());
+    int currNum = temp[0];
+    int count = 1;
+    for (int i = 1; i < temp.size(); i++) {
+        if (temp[i] == currNum) {
+            count++;
+        } else {
+            cout << currNum << ": " << count << endl;
+            currNum = temp[i];
+            count = 1;
+        }
+    }
+    cout << currNum << ": " << count << endl;
+}
+
+int main() {
+    int n;
+    cin >> n;
+    vector<int> a(n);
+    for (int i = 0; i < n; i++) {
+        cin >> a[i];
+    }
+    
+    cout << longestEvenSubarray(a) << endl;
+    
+    vector<int> incSub = longestIncreasingSubarray(a);
+    for (int x : incSub) cout << x << " ";
+    cout << endl;
+    
+    int k;
+    cin >> k;
+    cout << kthLargest(a, k) << endl;
+    
+    vector<int> primeIncSub = longestPrimeIncreasingSubarray(a);
+    for (int x : primeIncSub) cout << x << " ";
+    cout << endl;
+    
+    frequencyCount(a);
+    
+    return 0;
+}
