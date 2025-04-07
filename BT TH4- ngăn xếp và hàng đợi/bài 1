@@ -1,0 +1,205 @@
+#include <iostream>
+#include <cstring>
+#include <cmath>
+#include <stack>
+#include <cctype>
+
+#define MAX 100
+
+class StackInt {
+private:
+    int arr[MAX];
+    int top;
+
+public:
+    StackInt() : top(-1) {}
+
+    bool IsEmpty() {
+        return top == -1;
+    }
+
+    bool IsFull() {
+        return top == MAX - 1;
+    }
+
+    void Push(int value) {
+        if (IsFull()) {
+            std::cout << "Stack is full!" << std::endl;
+            return;
+        }
+        arr[++top] = value;
+    }
+
+    int Pop() {
+        if (IsEmpty()) {
+            std::cout << "Stack is empty!" << std::endl;
+            return -1;
+        }
+        return arr[top--];
+    }
+
+    int Peek() {
+        if (IsEmpty()) {
+            std::cout << "Stack is empty!" << std::endl;
+            return -1;
+        }
+        return arr[top];
+    }
+
+    void Clear() {
+        top = -1;
+    }
+};
+
+struct Node {
+    int data;
+    Node* next;
+};
+
+class LinkedStackInt {
+private:
+    Node* top;
+
+public:
+    LinkedStackInt() : top(nullptr) {}
+
+    bool IsEmpty() {
+        return top == nullptr;
+    }
+
+    void Push(int value) {
+        Node* newNode = new Node{value, top};
+        top = newNode;
+    }
+
+    int Pop() {
+        if (IsEmpty()) {
+            std::cout << "Stack is empty!" << std::endl;
+            return -1;
+        }
+        Node* temp = top;
+        int value = top->data;
+        top = top->next;
+        delete temp;
+        return value;
+    }
+
+    int Peek() {
+        if (IsEmpty()) {
+            std::cout << "Stack is empty!" << std::endl;
+            return -1;
+        }
+        return top->data;
+    }
+
+    void Clear() {
+        while (!IsEmpty()) {
+            Pop();
+        }
+    }
+};
+
+void ReverseNumber(int number) {
+    StackInt stack;
+    while (number > 0) {
+        stack.Push(number % 10);
+        number /= 10;
+    }
+    std::cout << "Reversed number: ";
+    while (!stack.IsEmpty()) {
+        std::cout << stack.Pop();
+    }
+    std::cout << std::endl;
+}
+
+class StackString {
+private:
+    char* arr;
+    int top;
+    int capacity;
+
+public:
+    StackString(int size) {
+        arr = new char[size];
+        top = -1;
+        capacity = size;
+    }
+
+    ~StackString() {
+        delete[] arr;
+    }
+
+    bool IsEmpty() {
+        return top == -1;
+    }
+
+    void Push(char value) {
+        if (top < capacity - 1) {
+            arr[++top] = value;
+        }
+    }
+
+    char Pop() {
+        if (!IsEmpty()) {
+            return arr[top--];
+        }
+        return '\0';
+    }
+
+    void Clear() {
+        top = -1;
+    }
+};
+
+bool IsPalindrome(const std::string& str) {
+    StackString stack(str.length());
+    for (char ch : str) {
+        stack.Push(ch);
+    }
+    for (char ch : str) {
+        if (ch != stack.Pop()) {
+            return false;
+        }
+    }
+    return true;
+}
+
+void DecimalToBinary(int number) {
+    LinkedStackInt stack;
+    while (number > 0) {
+        stack.Push(number % 2);
+        number /= 2;
+    }
+    std::cout << "Binary representation: ";
+    while (!stack.IsEmpty()) {
+        std::cout << stack.Pop();
+    }
+    std::cout << std::endl;
+}
+
+int Precedence(char op) {
+    if (op == '+' || op == '-') return 1;
+    if (op == '*' || op == '/') return 2;
+    return 0;
+}
+
+void InfixToPostfix(const std::string& infix) {
+    StackString stack(infix.length());
+    std::string postfix;
+    for (char ch : infix) {
+        if (isalnum(ch)) {
+            postfix += ch;
+        } else if (ch == '(') {
+            stack.Push(ch);
+        } else if (ch == ')') {
+            while (!stack.IsEmpty() && stack.Peek() != '(') {
+                postfix += stack.Pop();
+            }
+            stack.Pop();
+        } else {
+            while (!stack.IsEmpty() && Precedence(stack.Peek()) >= Precedence(ch)) {
+                postfix += stack.Pop();
+            }
+            stack.Push(ch);
+        }
+    }
