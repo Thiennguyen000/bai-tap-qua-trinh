@@ -1,0 +1,41 @@
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <unordered_map>
+
+using namespace std;
+
+int main() {
+    ifstream fin("CapSo.INP");
+    ofstream fout("CapSo.OUT");
+
+    int n, k;
+    fin >> n >> k;
+    vector<int> a(n);
+    unordered_map<int, int> freq;
+    vector<pair<int, int>> pairs;
+
+    for (int i = 0; i < n; ++i) {
+        fin >> a[i];
+    }
+
+    for (int i = 0; i < n; ++i) {
+        int complement = k - a[i];
+        if (freq[complement] > 0) {
+            pairs.push_back({complement, a[i]});
+        }
+        freq[a[i]]++;
+    }
+
+    if (pairs.empty()) {
+        fout << 0;
+    } else {
+        for (auto p : pairs) {
+            fout << p.first << " " << p.second << endl;
+        }
+    }
+
+    fin.close();
+    fout.close();
+    return 0;
+}
