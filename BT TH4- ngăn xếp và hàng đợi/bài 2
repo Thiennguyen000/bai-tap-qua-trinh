@@ -1,0 +1,191 @@
+#include <iostream>
+#include <stdexcept>
+
+#define MAX 100
+
+class QueueInt {
+private:
+    int arr[MAX];
+    int front;
+    int rear;
+
+public:
+    QueueInt() : front(0), rear(0) {}
+
+    bool IsEmpty() {
+        return front == rear;
+    }
+
+    bool IsFull() {
+        return (rear + 1) % MAX == front;
+    }
+
+    void Enqueue(int value) {
+        if (IsFull()) {
+            throw std::overflow_error("Queue is full!");
+        }
+        arr[rear] = value;
+        rear = (rear + 1) % MAX;
+    }
+
+    int Dequeue() {
+        if (IsEmpty()) {
+            throw std::underflow_error("Queue is empty!");
+        }
+        int value = arr[front];
+        front = (front + 1) % MAX;
+        return value;
+    }
+
+    int Peek() {
+        if (IsEmpty()) {
+            throw std::underflow_error("Queue is empty!");
+        }
+        return arr[front];
+    }
+
+    void Clear() {
+        front = rear = 0;
+    }
+};
+
+struct Node {
+    int data;
+    Node* next;
+};
+
+class LinkedQueueInt {
+private:
+    Node* front;
+    Node* rear;
+
+public:
+    LinkedQueueInt() : front(nullptr), rear(nullptr) {}
+
+    bool IsEmpty() {
+        return front == nullptr;
+    }
+
+    void Enqueue(int value) {
+        Node* newNode = new Node{value, nullptr};
+        if (IsEmpty()) {
+            front = rear = newNode;
+        } else {
+            rear->next = newNode;
+            rear = newNode;
+        }
+    }
+
+    int Dequeue() {
+        if (IsEmpty()) {
+            throw std::underflow_error("Queue is empty!");
+        }
+        Node* temp = front;
+        int value = front->data;
+        front = front->next;
+        delete temp;
+        if (front == nullptr) {
+            rear = nullptr;
+        }
+        return value;
+    }
+
+    int Peek() {
+        if (IsEmpty()) {
+            throw std::underflow_error("Queue is empty!");
+        }
+        return front->data;
+    }
+
+    void Clear() {
+        while (!IsEmpty()) {
+            Dequeue();
+        }
+    }
+};
+
+void DancePairing(LinkedQueueInt& maleQueue, LinkedQueueInt& femaleQueue) {
+    while (!maleQueue.IsEmpty() && !femaleQueue.IsEmpty()) {
+        int male = maleQueue.Dequeue();
+        int female = femaleQueue.Dequeue();
+        std::cout << "Pair: Male " << male << " with Female " << female << std::endl;
+    }
+}
+
+void CountingSort(int arr[], int size, int exp) {
+    int output[size];
+    int count[10] = {0};
+
+    for (int i = 0; i < size; i++) {
+        count[(arr[i] / exp) % 10]++;
+    }
+
+    for (int i = 1; i < 10; i++) {
+        count[i] += count[i - 1];
+    }
+
+    for (int i = size - 1; i >= 0; i--) {
+        output[count[(arr[i] / exp) % 10] - 1] = arr[i];
+        count[(arr[i] / exp) % 10]--;
+    }
+
+    for (int i = 0; i < size; i++) {
+        arr[i] = output[i];
+    }
+}
+
+void RadixSort(int arr[], int size) {
+    int max = arr[0];
+    for (int i = 1; i < size; i++) {
+        if (arr[i] > max) {
+            max = arr[i];
+        }
+    }
+
+    for (int exp = 1; max / exp > 0; exp *= 10) {
+        CountingSort(arr, size, exp);
+    }
+}
+
+int main() {
+    QueueInt queue;
+    LinkedQueueInt linkedQueue;
+
+    try {
+        queue.Enqueue(10);
+        queue.Enqueue(20);
+        queue.Enqueue(30);
+        std::cout << "Front element: " << queue.Peek() << std::endl;
+        std::cout << "Dequeued: " << queue.Dequeue() << std::endl;
+        std::cout << "Front element after dequeue: " << queue.Peek() << std::endl;
+    } catch (const std::exception& e) {
+        std::cerr << e.what() << std::endl;
+    }
+
+    linkedQueue.Enqueue(1);
+    linkedQueue.Enqueue(2);
+    linkedQueue.Enqueue(3);
+    std::cout << "Front element: " << linkedQueue.Peek() << std::endl;
+    std::cout << "Dequeued: " << linkedQueue.Dequeue() << std::endl;
+    std::cout << "Front element after dequeue: " << linkedQueue.Peek() << std::endl;
+
+    LinkedQueueInt maleQueue;
+    LinkedQueueInt femaleQueue;
+    maleQueue.Enqueue(1);
+    maleQueue.Enqueue(2);
+    femaleQueue.Enqueue(3);
+    femaleQueue.Enqueue(4);
+    std::cout << "\nDance Pairing:" << std::endl;
+    DancePairing(maleQueue, femaleQueue);
+
+    int arr[] = {170, 45, 75, 90, 802, 24, 2, 66};
+    int size = sizeof(arr) / sizeof(arr[0]);
+    RadixSort(arr, size);
+    std::cout << "\nSorted array: ";
+    for (int i = 0; i < size; i++) {
+        std::cout << arr[i] << " ";
+    }
+    std::cout << std::endl;
+
+    return 0;
+}
