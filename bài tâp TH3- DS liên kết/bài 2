@@ -1,0 +1,165 @@
+#include <iostream>
+#include <cstring>
+
+struct SinhVien {
+    char hoTen[50];
+    char diaChi[70];
+    char lop[10];
+    int khoa;
+    SinhVien* next;
+};
+
+class ListSV {
+private:
+    SinhVien* head;
+
+public:
+    ListSV() : head(nullptr) {}
+
+    ~ListSV() {
+        clear();
+    }
+
+    void clear() {
+        SinhVien* current = head;
+        while (current != nullptr) {
+            SinhVien* nextNode = current->next;
+            delete current;
+            current = nextNode;
+        }
+        head = nullptr;
+    }
+
+    void add(const SinhVien& sv) {
+        SinhVien* newNode = new SinhVien(sv);
+        newNode->next = head;
+        head = newNode;
+    }
+
+    void removeByName(const char* name) {
+        SinhVien* current = head;
+        SinhVien* previous = nullptr;
+
+        while (current != nullptr) {
+            if (strcmp(current->hoTen, name) == 0) {
+                if (previous == nullptr) {
+                    head = current->next;
+                } else {
+                    previous->next = current->next;
+                }
+                delete current;
+                return;
+            }
+            previous = current;
+            current = current->next;
+        }
+    }
+
+    void removeByAddress(const char* address) {
+        SinhVien* current = head;
+        SinhVien* previous = nullptr;
+
+        while (current != nullptr) {
+            if (strcmp(current->diaChi, address) == 0) {
+                if (previous == nullptr) {
+                    head = current->next;
+                } else {
+                    previous->next = current->next;
+                }
+                delete current;
+                return;
+            }
+            previous = current;
+            current = current->next;
+        }
+    }
+
+    void addStudent(const char* hoTen, const char* diaChi, const char* lop, int khoa) {
+        SinhVien sv;
+        strncpy(sv.hoTen, hoTen, sizeof(sv.hoTen) - 1);
+        sv.hoTen[sizeof(sv.hoTen) - 1] = '\0';
+        strncpy(sv.diaChi, diaChi, sizeof(sv.diaChi) - 1);
+        sv.diaChi[sizeof(sv.diaChi) - 1] = '\0';
+        strncpy(sv.lop, lop, sizeof(sv.lop) - 1);
+        sv.lop[sizeof(sv.lop) - 1] = '\0';
+        sv.khoa = khoa;
+        add(sv);
+    }
+
+    void print() const {
+        SinhVien* current = head;
+        while (current != nullptr) {
+            std::cout << "Ho ten: " << current->hoTen << ", Dia chi: " << current->diaChi
+                      << ", Lop: " << current->lop << ", Khoa: " << current->khoa << std::endl;
+            current = current->next;
+        }
+    }
+
+    void selectionSort(int (*compare)(const SinhVien&, const SinhVien&)) {
+        if (head == nullptr) return;
+
+        for (SinhVien* i = head; i != nullptr; i = i->next) {
+            SinhVien* minNode = i;
+            for (SinhVien* j = i->next; j != nullptr; j = j->next) {
+                if (compare(*j, *minNode) < 0) {
+                    minNode = j;
+                }
+            }
+            if (minNode != i) {
+                std::swap(*i, *minNode);
+            }
+        }
+    }
+};
+
+// Hàm so sánh theo tên
+int compareByName(const SinhVien& a, const SinhVien& b) {
+    return strcmp(a.hoTen, b.hoTen);
+}
+
+// Hàm nhập một sinh viên
+void inputStudent(SinhVien& sv) {
+    std::cout << "Nhap ho ten: ";
+    std::cin.ignore();
+    std::cin.getline(sv.hoTen, sizeof(sv.hoTen));
+    std::cout << "Nhap dia chi: ";
+    std::cin.getline(sv.diaChi, sizeof(sv.diaChi));
+    std::cout << "Nhap lop: ";
+    std::cin.getline(sv.lop, sizeof(sv.lop));
+    std::cout << "Nhap khoa: ";
+    std::cin >> sv.khoa;
+}
+
+// Hàm xuất một sinh viên
+void outputStudent(const SinhVien& sv) {
+    std::cout << "Ho ten: " << sv.hoTen << ", Dia chi:
+     << ", Lop: " << sv.lop << ", Khoa: " << sv.khoa << std::endl;
+}
+
+int main() {
+    ListSV list;
+    
+    // Nhập 10 sinh viên và đưa vào danh sách
+    for (int i = 0; i < 10; ++i) {
+        SinhVien sv;
+        std::cout << "Nhap thong tin sinh vien " << (i + 1) << ":" << std::endl;
+        inputStudent(sv);
+        list.add(sv);
+    }
+    std::cout << "\nDanh sach sinh vien:" << std::endl;
+    list.print();
+
+    list.removeByName("Nguyen Van Teo");
+    std::cout << "\nDanh sach sau khi xoa sinh vien 'Nguyen Van Teo':" << std::endl;
+    list.print();
+
+    list.removeByAddress("Nguyen Van Cu");
+    std::cout << "\nDanh sach sau khi xoa sinh vien co dia chi 'Nguyen Van Cu':" << std::endl;
+    list.print();
+
+    list.addStudent("Tran Thi Mo", "25 Hong Bang", "TT0901", 2009);
+    std::cout << "\nDanh sach sau khi them sinh vien 'Tran Thi Mo':" << std::endl;
+    list.print();
+
+    return 0;
+}
