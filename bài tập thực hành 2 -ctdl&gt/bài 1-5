@@ -1,0 +1,33 @@
+#include <iostream>
+#include <stack>
+#include <sstream>
+#include <string>
+using namespace std;
+
+int tinhHauTo(string bieuthuc) {
+    stack<int> s;
+    stringstream ss(bieuthuc);
+    string token;
+
+    while (ss >> token) {
+        if (isdigit(token[0]) || (token[0] == '-' && token.length() > 1)) {
+            s.push(stoi(token));
+        } else {
+            int b = s.top(); s.pop();
+            int a = s.top(); s.pop();
+            if (token == "+") s.push(a + b);
+            else if (token == "-") s.push(a - b);
+            else if (token == "*") s.push(a * b);
+            else if (token == "/") s.push(a / b);
+        }
+    }
+
+    return s.top();
+}
+
+int main() {
+    string bieuthuc;
+    getline(cin, bieuthuc);
+    cout << tinhHauTo(bieuthuc) << endl;
+    return 0;
+}
