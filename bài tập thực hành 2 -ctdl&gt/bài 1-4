@@ -1,0 +1,87 @@
+#include <iostream>
+#include <vector>
+#include <cmath>
+using namespace std;
+
+struct DaThuc {
+    int bac;
+    vector<int> hs;
+};
+
+DaThuc nhapDaThuc() {
+    DaThuc dt;
+    cin >> dt.bac;
+    dt.hs.resize(dt.bac + 1);
+    for (int i = 0; i <= dt.bac; ++i) {
+        cin >> dt.hs[i];
+    }
+    return dt;
+}
+
+int tinhGiaTri(DaThuc dt, int x0) {
+    int kq = 0;
+    for (int i = 0; i <= dt.bac; ++i) {
+        kq += dt.hs[i] * pow(x0, i);
+    }
+    return kq;
+}
+
+DaThuc tong(DaThuc a, DaThuc b) {
+    DaThuc kq;
+    kq.bac = max(a.bac, b.bac);
+    kq.hs.resize(kq.bac + 1, 0);
+    for (int i = 0; i <= a.bac; ++i) kq.hs[i] += a.hs[i];
+    for (int i = 0; i <= b.bac; ++i) kq.hs[i] += b.hs[i];
+    return kq;
+}
+
+DaThuc hieu(DaThuc a, DaThuc b) {
+    DaThuc kq;
+    kq.bac = max(a.bac, b.bac);
+    kq.hs.resize(kq.bac + 1, 0);
+    for (int i = 0; i <= a.bac; ++i) kq.hs[i] += a.hs[i];
+    for (int i = 0; i <= b.bac; ++i) kq.hs[i] -= b.hs[i];
+    return kq;
+}
+
+DaThuc tich(DaThuc a, DaThuc b) {
+    DaThuc kq;
+    kq.bac = a.bac + b.bac;
+    kq.hs.resize(kq.bac + 1, 0);
+    for (int i = 0; i <= a.bac; ++i) {
+        for (int j = 0; j <= b.bac; ++j) {
+            kq.hs[i + j] += a.hs[i] * b.hs[j];
+        }
+    }
+    return kq;
+}
+
+void inDaThuc(DaThuc dt) {
+    for (int i = dt.bac; i >= 0; --i) {
+        if (dt.hs[i] == 0) continue;
+        if (i != dt.bac && dt.hs[i] > 0) cout << "+";
+        if (i == 0) cout << dt.hs[i];
+        else if (i == 1) cout << dt.hs[i] << "x";
+        else cout << dt.hs[i] << "x^" << i;
+    }
+    cout << endl;
+}
+
+int main() {
+    DaThuc p = nhapDaThuc();
+    DaThuc q = nhapDaThuc();
+
+    int x0;
+    cin >> x0;
+    cout << tinhGiaTri(p, x0) << endl;
+
+    DaThuc tongPQ = tong(p, q);
+    DaThuc hieuPQ = hieu(p, q);
+    DaThuc tichPQ = tich(p, q);
+
+    inDaThuc(tongPQ);
+    inDaThuc(hieuPQ);
+    inDaThuc(tichPQ);
+
+    return 0;
+}
