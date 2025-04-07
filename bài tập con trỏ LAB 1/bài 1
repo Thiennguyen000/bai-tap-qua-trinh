@@ -1,0 +1,52 @@
+#include <iostream>
+#include <cmath>
+using namespace std;
+
+void solveQuadratic(double* a, double* b, double* c, double* x1, double* x2, int* numRoots) {
+    if (*a == 0) {
+        if (*b == 0) {
+            if (*c == 0) {
+                *numRoots = -1;
+            } else {
+                *numRoots = 0;
+            }
+        } else {
+            *x1 = -(*c) / (*b);
+            *numRoots = 1; 
+        }
+    } else {
+        double delta = (*b) * (*b) - 4 * (*a) * (*c);
+        if (delta > 0) {
+            *x1 = (-(*b) + sqrt(delta)) / (2 * (*a));
+            *x2 = (-(*b) - sqrt(delta)) / (2 * (*a));
+            *numRoots = 2;
+        } else if (delta == 0) {
+            *x1 = -(*b) / (2 * (*a));
+            *numRoots = 1;
+        } else {
+            *numRoots = 0;
+        }
+    }
+}
+
+int main() {
+    double a, b, c, x1, x2;
+    int numRoots;
+    
+    cout << "Nhap he so a, b, c: ";
+    cin >> a >> b >> c;
+    
+    solveQuadratic(&a, &b, &c, &x1, &x2, &numRoots);
+    
+    if (numRoots == -1) {
+        cout << "Phuong trinh co vo so nghiem" << endl;
+    } else if (numRoots == 0) {
+        cout << "Phuong trinh vo nghiem" << endl;
+    } else if (numRoots == 1) {
+        cout << "Phuong trinh co 1 nghiem: x = " << x1 << endl;
+    } else {
+        cout << "Phuong trinh co 2 nghiem: x1 = " << x1 << ", x2 = " << x2 << endl;
+    }
+    
+    return 0;
+}
