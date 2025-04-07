@@ -1,0 +1,16 @@
+#include <iostream>
+#include <string>
+
+int main() {
+    std::string s;
+    int k;
+    std::cout << "Moi ban nhap chuoi s: ";
+    std::cin >> s;
+    std::cout << "Moi ban nhap vi tri k: ";
+    std::cin >> k;
+    if (k >= 0 && k < s.length()) {
+        s.erase(k, 1);
+    }
+    std::cout << "Chuoi sau khi xoa ky tu tai vi tri " << k << ": " << s << std::endl;
+    return 0;
+}
