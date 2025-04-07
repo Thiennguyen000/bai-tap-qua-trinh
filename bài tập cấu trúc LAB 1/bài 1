@@ -1,0 +1,70 @@
+#include <iostream>
+#include <string>
+#include <algorithm>
+
+using namespace std;
+
+struct NhanVien {
+    string MaSo;
+    string Ho;
+    string Ten;
+    int Phai;
+    int ThamNien;
+};
+
+struct PhongBan {
+    NhanVien aNhanVien[100];
+    int SoLuong;
+};
+
+void NhapPhongBan(PhongBan &pb) {
+    cout << "Nhap so luong nhan vien: ";
+    cin >> pb.SoLuong;
+    for (int i = 0; i < pb.SoLuong; i++) {
+        cout << "Nhap ma so: ";
+        cin >> pb.aNhanVien[i].MaSo;
+        cout << "Nhap ho: ";
+        cin >> pb.aNhanVien[i].Ho;
+        cout << "Nhap ten: ";
+        cin >> pb.aNhanVien[i].Ten;
+        cout << "Nhap phai (0: Nu, 1: Nam): ";
+        cin >> pb.aNhanVien[i].Phai;
+        cout << "Nhap tham nien: ";
+        cin >> pb.aNhanVien[i].ThamNien;
+    }
+}
+
+void XuatPhongBan(PhongBan pb) {
+    for (int i = 0; i < pb.SoLuong; i++) {
+        cout << pb.aNhanVien[i].MaSo << " " << pb.aNhanVien[i].Ho << " " 
+             << pb.aNhanVien[i].Ten << " " << pb.aNhanVien[i].Phai << " " 
+             << pb.aNhanVien[i].ThamNien << endl;
+    }
+}
+
+void DemSiSo(PhongBan ds, int &sonam, int &sonu) {
+    sonam = 0;
+    sonu = 0;
+    for (int i = 0; i < ds.SoLuong; i++) {
+        if (ds.aNhanVien[i].Phai == 1) sonam++;
+        else sonu++;
+    }
+}
+
+void SapXepTangTheoThamNien(PhongBan &pb) {
+    sort(pb.aNhanVien, pb.aNhanVien + pb.SoLuong, [](NhanVien a, NhanVien b) {
+        return a.ThamNien < b.ThamNien;
+    });
+}
+
+int main() {
+    PhongBan pb;
+    NhapPhongBan(pb);
+    int sonam, sonu;
+    DemSiSo(pb, sonam, sonu);
+    cout << "So luong nam: " << sonam << endl;
+    cout << "So luong nu: " << sonu << endl;
+    SapXepTangTheoThamNien(pb);
+    XuatPhongBan(pb);
+    return 0;
+}
