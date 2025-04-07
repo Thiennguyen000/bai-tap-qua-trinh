@@ -1,0 +1,58 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    int nx, ny, nz;
+    cin >> nx;
+    vector<int> x(nx);
+    for (int i = 0; i < nx; i++) {
+        cin >> x[i];
+    }
+    cin >> ny;
+    vector<int> y(ny);
+    for (int i = 0; i < ny; i++) {
+        cin >> y[i];
+    }
+    cin >> nz;
+    vector<int> z(nz);
+    for (int i = 0; i < nz; i++) {
+        cin >> z[i];
+    }
+    vector<int> common;
+    for (int i = 0; i < nx; i++) {
+        for (int j = 0; j < ny; j++) {
+            if (x[i] == y[j]) {
+                for (int k = 0; k < nz; k++) {
+                    if (x[i] == z[k]) {
+                        common.push_back(x[i]);
+                        break;
+                    }
+                }
+            }
+        }
+    }
+    
+    if (common.empty()) {
+        cout << 0 << endl;
+    } else {
+        sort(common.begin(), common.end());
+        vector<int> unique_common;
+        unique_common.push_back(common[0]);
+        for (int i = 1; i < common.size(); i++) {
+            if (common[i] != common[i-1]) {
+                unique_common.push_back(common[i]);
+            }
+        }
+        cout << unique_common.size() << endl;
+        for (int i = 0; i < unique_common.size(); i++) {
+            cout << unique_common[i];
+            if (i < unique_common.size() - 1) {
+                cout << " ";
+            }
+        }
+        cout << endl;
+    }
+    return 0;
+}
