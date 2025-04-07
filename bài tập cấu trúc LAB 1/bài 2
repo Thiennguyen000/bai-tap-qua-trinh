@@ -1,0 +1,79 @@
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+struct LoaiHoa {
+    string Ten;
+    int SoLuong;
+    string DVT;
+    float DonGia;
+};
+
+struct DanhSachLoaiHoa {
+    LoaiHoa aLoaiHoa[20];
+    int SoLuong;
+};
+
+void NhapDanhSach(DanhSachLoaiHoa &ds) {
+    cout << "Nhap so luong loai hoa: ";
+    cin >> ds.SoLuong;
+    for (int i = 0; i < ds.SoLuong; i++) {
+        cout << "Nhap ten loai hoa: ";
+        cin >> ds.aLoaiHoa[i].Ten;
+        cout << "Nhap so luong: ";
+        cin >> ds.aLoaiHoa[i].SoLuong;
+        cout << "Nhap don vi tinh: ";
+        cin >> ds.aLoaiHoa[i].DVT;
+        cout << "Nhap don gia: ";
+        cin >> ds.aLoaiHoa[i].DonGia;
+    }
+}
+
+void XuatDanhSach(DanhSachLoaiHoa ds) {
+    for (int i = 0; i < ds.SoLuong; i++) {
+        cout << "Ten loai hoa: " << ds.aLoaiHoa[i].Ten << ", So luong: " 
+             << ds.aLoaiHoa[i].SoLuong << ", DVT: " << ds.aLoaiHoa[i].DVT 
+             << ", Don gia: " << ds.aLoaiHoa[i].DonGia << endl;
+    }
+}
+
+int TimLoaiHoa(DanhSachLoaiHoa ds, string tenloai) {
+    for (int i = 0; i < ds.SoLuong; i++) {
+        if (ds.aLoaiHoa[i].Ten == tenloai) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+void XuLyBanHoa(DanhSachLoaiHoa &ds, string tenloai, int soluong) {
+    int viTri = TimLoaiHoa(ds, tenloai);
+    if (viTri == -1) {
+        cout << "Loai hoa khong ton tai." << endl;
+    } else {
+        if (ds.aLoaiHoa[viTri].SoLuong >= soluong) {
+            float tongTien = soluong * ds.aLoaiHoa[viTri].DonGia;
+            cout << "Tong tien: " << tongTien << endl;
+            ds.aLoaiHoa[viTri].SoLuong -= soluong;
+        } else {
+            cout << "Khong du so luong." << endl;
+        }
+    }
+}
+
+int main() {
+    DanhSachLoaiHoa ds;
+    NhapDanhSach(ds);
+    XuatDanhSach(ds);
+    
+    string tenloai;
+    int soluong;
+    cout << "Nhap ten loai hoa muon mua: ";
+    cin >> tenloai;
+    cout << "Nhap so luong: ";
+    cin >> soluong;
+    
+    XuLyBanHoa(ds, tenloai, soluong);
+    return 0;
+}
