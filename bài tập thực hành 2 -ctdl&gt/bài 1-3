@@ -1,0 +1,88 @@
+#include <iostream>
+#include <string>
+#include <algorithm>
+using namespace std;
+
+bool lonHonHoacBang(string a, string b) {
+    if (a.length() != b.length())
+        return a.length() > b.length();
+    return a >= b;
+}
+
+string cong(string a, string b) {
+    if (a.length() < b.length()) swap(a, b);
+    int carry = 0;
+    string res = "";
+    int diff = a.length() - b.length();
+
+    for (int i = b.length() - 1; i >= 0; i--) {
+        int sum = (a[i + diff] - '0') + (b[i] - '0') + carry;
+        res += (sum % 10 + '0');
+        carry = sum / 10;
+    }
+
+    for (int i = diff - 1; i >= 0; i--) {
+        int sum = (a[i] - '0') + carry;
+        res += (sum % 10 + '0');
+        carry = sum / 10;
+    }
+
+    if (carry) res += (carry + '0');
+    reverse(res.begin(), res.end());
+    return res;
+}
+
+string tru(string a, string b) {
+    if (!lonHonHoacBang(a, b)) return "-" + tru(b, a);
+    int borrow = 0;
+    string res = "";
+    int diff = a.length() - b.length();
+
+    for (int i = b.length() - 1; i >= 0; i--) {
+        int sub = (a[i + diff] - '0') - (b[i] - '0') - borrow;
+        if (sub < 0) {
+            sub += 10;
+            borrow = 1;
+        } else borrow = 0;
+        res += (sub + '0');
+    }
+
+    for (int i = diff - 1; i >= 0; i--) {
+        int sub = (a[i] - '0') - borrow;
+        if (sub < 0) {
+            sub += 10;
+            borrow = 1;
+        } else borrow = 0;
+        res += (sub + '0');
+    }
+
+    while (res.length() > 1 && res.back() == '0') res.pop_back();
+    reverse(res.begin(), res.end());
+    return res;
+}
+
+string nhan(string a, string b) {
+    int m = a.size(), n = b.size();
+    string res(m + n, '0');
+
+    for (int i = m - 1; i >= 0; --i) {
+        for (int j = n - 1; j >= 0; --j) {
+            int mul = (a[i] - '0') * (b[j] - '0');
+            int sum = (res[i + j + 1] - '0') + mul;
+            res[i + j + 1] = (sum % 10 + '0');
+            res[i + j] += sum / 10;
+        }
+    }
+
+    size_t start = res.find_first_not_of("0");
+    return (start == string::npos) ? "0" : res.substr(start);
+}
+
+int main() {
+    string a, b;
+    cin >> a >> b;
+    cout << cong(a, b) << endl;
+    cout << tru(a, b) << endl;
+    cout << nhan(a, b) << endl;
+    return 0;
+}
