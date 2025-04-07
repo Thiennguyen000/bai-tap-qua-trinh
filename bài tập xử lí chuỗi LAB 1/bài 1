@@ -1,0 +1,12 @@
+#include <iostream>
+#include <string>
+#include <algorithm>
+
+int main() {
+    std::string s;
+    std::cout << "Moi ban nhap chuoi s: ";
+    std::cin >> s;
+    std::sort(s.begin(), s.end());
+    std::cout << "Chuoi \"" << s << "\" sau khi sap xep: " << s << std::endl;
+    return 0;
+}
