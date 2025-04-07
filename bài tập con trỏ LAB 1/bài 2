@@ -1,0 +1,47 @@
+#include <iostream>
+using namespace std;
+
+void checkProperties(int* a, int n, bool* isAlternating, bool* isAllEven) {
+    *isAllEven = true;
+    *isAlternating = true;
+    for (int i = 0; i < n; i++) {
+        if (a[i] % 2 != 0) {
+            *isAllEven = false;
+        }
+    }
+    if (n > 1) {
+        for (int i = 0; i < n - 1; i++) {
+            if ((a[i] % 2 == 0 && a[i + 1] % 2 == 0) || (a[i] % 2 != 0 && a[i + 1] % 2 != 0)) {
+                *isAlternating = false;
+                break;
+            }
+        }
+    }
+}
+int main() {
+    int n;
+    cout << "Nhap so phan tu n (n <= 100): ";
+    cin >> n;
+    if (n <= 0 || n > 100) {
+        cout << "n khong hop le!" << endl;
+        return 1;
+    }
+    int a[100];
+    cout << "Nhap " << n << " phan tu cua day: ";
+    for (int i = 0; i < n; i++) {
+        cin >> a[i];
+    }
+    bool isAlternating, isAllEven;
+    checkProperties(a, n, &isAlternating, &isAllEven);
+    if (isAlternating) {
+        cout << "Day co tinh chan le xen ke" << endl;
+    } else {
+        cout << "Day khong co tinh chan le xen ke" << endl;
+    }
+    if (isAllEven) {
+        cout << "Day toan chan" << endl;
+    } else {
+        cout << "Day khong toan chan" << endl;
+    }
+    return 0;
+}
