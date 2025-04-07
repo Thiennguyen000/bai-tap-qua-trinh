@@ -1,0 +1,64 @@
+#include <iostream>
+#include <iomanip>
+#include <cmath>
+using namespace std;
+
+int main() {
+    double a, b, c;
+    cin >> a >> b >> c;
+    cout << fixed << setprecision(2);
+
+    if (a == 0) {
+        if (b == 0) {
+            if (c == 0) {
+                cout << "Phuong trinh co vo so nghiem" << endl;
+            } else {
+                cout << "Phuong trinh vo nghiem" << endl;
+            }
+        } else {
+            double t = -c / b;
+            if (t > 0) {
+                cout << "Phuong trinh co 2 nghiem" << endl;
+                cout << -sqrt(t) << " " << sqrt(t) << endl;
+            } else if (t == 0) {
+                cout << "Phuong trinh co 1 nghiem" << endl;
+                cout << "0.00" << endl;
+            } else {
+                cout << "Phuong trinh vo nghiem" << endl;
+            }
+        }
+    } else {
+        double delta = b * b - 4 * a * c;
+        if (delta > 0) {
+            double t1 = (-b + sqrt(delta)) / (2 * a);
+            double t2 = (-b - sqrt(delta)) / (2 * a);
+            if (t1 > 0 && t2 > 0) {
+                cout << "Phuong trinh co 4 nghiem" << endl;
+                cout << -sqrt(t1) << " " << -sqrt(t2) << " " << sqrt(t2) << " " << sqrt(t1) << endl;
+            } else if (t1 > 0) {
+                cout << "Phuong trinh co 2 nghiem" << endl;
+                cout << -sqrt(t1) << " " << sqrt(t1) << endl;
+            } else if (t2 > 0) {
+                cout << "Phuong trinh co 2 nghiem" << endl;
+                cout << -sqrt(t2) << " " << sqrt(t2) << endl;
+            } else {
+                cout << "Phuong trinh vo nghiem" << endl;
+            }
+        } else if (delta == 0) {
+            double t = -b / (2 * a);
+            if (t > 0) {
+                cout << "Phuong trinh co 2 nghiem" << endl;
+                cout << -sqrt(t) << " " << sqrt(t) << endl;
+            } else if (t == 0) {
+                cout << "Phuong trinh co 1 nghiem" << endl;
+                cout << "0.00" << endl;
+            } else {
+                cout << "Phuong trinh vo nghiem" << endl;
+            }
+        } else {
+            cout << "Phuong trinh vo nghiem" << endl;
+        }
+    }
+
+    return 0;
+}
